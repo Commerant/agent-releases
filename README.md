@@ -45,7 +45,7 @@ sha256sum -c commerant-agent_linux_amd64.tar.gz.sha256
 - A Commerant API key for your account (provided by Commerant)
 - A folder where your ERP or business system writes its export files
 
-## Installation
+## Installation on Windows
 
 1. Download `commerant-agent.zip` and extract it to a permanent folder, for example `C:\CommerantAgent`.
 2. Start `commerant-agent.exe`.
