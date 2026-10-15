@@ -14,7 +14,7 @@ body:
   - type: input
     id: windows
     attributes:
-      label: Windows version
+      label: Operating system and version
   - type: dropdown
     id: source
     attributes:
@@ -23,7 +23,7 @@ body:
   - type: dropdown
     id: service
     attributes:
-      label: Runs as Windows service
+      label: Runs as a service (Windows service or systemd)
       options: ["Yes", "No"]
   - type: textarea
     id: description
