@@ -12,8 +12,20 @@ Get the latest version from the [Releases page](../../releases/latest).
 |---|---|
 | `commerant-agent.zip` | Full package: `commerant-agent.exe` and an example configuration (`config.toml.example`). Use this for a first installation. |
 | `commerant-agent.exe` | The executable only. Used by the built-in updater; you can also use it to replace an existing installation manually. |
+| `commerant-agent.exe.sha256` | SHA-256 checksum of `commerant-agent.exe`, to verify your download. |
 
 Always download from this repository's Releases page.
+
+### Verify your download (optional)
+
+Compare the checksum of the downloaded executable with the value in `commerant-agent.exe.sha256`. In PowerShell:
+
+```powershell
+(Get-FileHash .\commerant-agent.exe -Algorithm SHA256).Hash
+Get-Content .\commerant-agent.exe.sha256
+```
+
+The two hashes must be identical (case does not matter). If they differ, do not run the file and contact Commerant. If you use `commerant-agent.zip`, extract it first and check the extracted `commerant-agent.exe`.
 
 ## Requirements
 
@@ -62,7 +74,7 @@ interval = "5m"
 
 ## Updating
 
-Version numbers follow the release tags (`vX.Y.Z`). The agent checks this repository for newer releases and the **Update** page can install one. Restart the agent afterwards to run the new version.
+Version numbers follow the release tags (`vX.Y.Z`). The agent checks this repository for newer releases and the **Update** page can install one. The downloaded file is verified against the release's `commerant-agent.exe.sha256` and rejected if it is missing or does not match. Updating from the page needs a foreground run (not the Windows service). Restart the agent afterwards to run the new version.
 
 To update manually, stop the agent, replace `commerant-agent.exe` with the one from the latest release, and start it again. Your `config.toml` is kept.
 
