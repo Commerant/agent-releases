@@ -13,7 +13,7 @@ You can open an [issue](../../issues/new/choose) in this repository for question
 
 ## What to include
 
-- Agent version (shown on the management page, or in the file name of the release you installed)
+- Agent version (run `commerant-agent.exe -version`)
 - Windows version
 - Source type (`directory` or `exact-rest`) and whether the agent runs as a service
 - What you expected and what happened, with relevant log lines (from the **Log** page)
