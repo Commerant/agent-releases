@@ -143,7 +143,7 @@ Version numbers follow the release tags (`vX.Y.Z`). The agent checks this reposi
 - **Windows:** restart the agent after installing an update.
 - **Linux:** after an update through the management page or the updater, run `sudo systemctl restart commerant-agent`.
 
-To update manually, stop the agent, replace the executable (`commerant-agent.exe`, or `commerant-agent` extracted from the archive) with the one from the latest release, and start it again. Your `config.toml` is kept.
+To update manually, stop the agent (for a Windows service: stop the service, for example `Stop-Service CommerantAgent` in an administrator PowerShell), replace the executable (`commerant-agent.exe`, or `commerant-agent` extracted from the archive) with the one from the latest release, and start it again (`Start-Service CommerantAgent`, or `sudo systemctl start commerant-agent` on Linux). Your `config.toml` is kept.
 
 See the [release notes](../../releases) for what changed in each version.
 

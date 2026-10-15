@@ -16,11 +16,6 @@ body:
     attributes:
       label: Operating system and version
   - type: dropdown
-    id: source
-    attributes:
-      label: Source type
-      options: [directory, exact-rest]
-  - type: dropdown
     id: service
     attributes:
       label: Runs as a service (Windows service or systemd)
