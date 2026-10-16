@@ -49,14 +49,18 @@ sha256sum -c commerant-agent_linux_amd64.tar.gz.sha256
 
 1. Download `commerant-agent.zip` and extract it to a permanent folder, for example `C:\CommerantAgent`.
 2. Start `commerant-agent.exe`.
-3. On first start the agent creates a `config.toml` and opens its management page at <http://127.0.0.1:9800> (only reachable from the same machine).
-4. Open **Settings**, enter the watched folder, the Commerant endpoint and your API key, and save.
+3. On first start the agent creates a `config.toml` and opens the **Settings** page of its management page at <http://127.0.0.1:9800/settings> (only reachable from the same machine). If no browser opens, open that address yourself.
+4. Enter the watched folder, the Commerant endpoint and your API key. Use **Test connection** to check the endpoint and key, then click **Save**. Changes apply immediately; no restart is needed.
+
+Until an API key is set, the agent sends nothing and the dashboard shows "Setup not finished". Settings are validated when you save: the poll interval must be at least 10 seconds, the watched folder must exist, and the endpoint must be an https address.
+
+Only one agent can run per data folder. A second start, or starting the service while the agent runs in a window, stops with a message instead of sending files twice.
 
 If Windows SmartScreen shows a warning on first start, check that the file was downloaded from this repository before choosing to run it.
 
 ### Run as a Windows service
 
-On the **Service** page you can install the agent as a Windows service so it starts automatically. This requires starting the agent as administrator. The service runs without the management page; to change settings, stop the service and start the agent normally, or edit `config.toml` and restart the service.
+On the **Service** page you can install the agent as a Windows service so it starts automatically. This requires starting the agent as administrator; without administrator rights the page tells you so. The service runs without the management page; to change settings, stop the service and start the agent normally, or edit `config.toml` and restart the service.
 
 ## Installation on Linux
 
@@ -127,14 +131,29 @@ endpoint = "https://<your-commerant-endpoint>/api/v1/inbound"
 api_key = ""
 
 [schedule]
-interval = "5m"
+interval = "5m"          # at least 10s, for example "30s", "5m" or "1h"
+
+[logging]
+level = "info"           # debug, info, warn or error; applies immediately
+max_mb = 10              # rotate agent.log at this size
+max_age_days = 30        # remove rotated logs older than this
 ```
 
 - The agent scans `watch_dir` at every interval; subfolders are not scanned.
-- Successfully sent files are moved to `processed_dir` (a subfolder of `watch_dir`) and renamed with a `.done` suffix. Failed files stay in place and are retried.
+- Successfully sent files are moved to `processed_dir` (a subfolder of `watch_dir`) and renamed with a `.done` suffix. Files that fail to send stay in place and are retried at the next poll.
+- A `.json` file that is not valid JSON can never be sent as it is. It is moved to a `failed` subfolder of `watch_dir` with a `.failed` suffix and is not retried. Fix the file and put it back in the watched folder.
 - Files starting with `.` or ending in `.tmp`, `.part`, `.writing` or `.done` are skipped.
 - Use a watched folder that contains only the files you want to send.
 - Treat `config.toml` as confidential: it contains your API key.
+
+## Logs and troubleshooting
+
+| File | Content |
+|---|---|
+| `data/logs/agent.log` | Agent log. Rotated at `max_mb`; rotated files are removed after `max_age_days`. |
+| `agent-startup-error.log` | Why the agent could not start. Located next to the executable. If the agent cannot start, it stops with an error and writes the reason here. |
+
+Paths are relative to the agent folder (`C:\CommerantAgent` or `/opt/commerant-agent` in the examples above). When the agent runs as a service there is no management page, so read `agent.log` directly. On the **Log** page of a normal run you can view and download the log. On Linux the **Service** page only shows the `systemctl` commands to manage the service.
 
 ## Updating
 
