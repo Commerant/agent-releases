@@ -138,12 +138,26 @@ interval = "5m"
 
 ## Updating
 
-Version numbers follow the release tags (`vX.Y.Z`). The agent checks this repository for newer releases and the **Update** page can install one. The downloaded file is verified against the release's `.sha256` file and rejected if it is missing or does not match. Updating from the page needs a foreground run (not the service).
+Updates are installed automatically. Version numbers follow the release tags (`vX.Y.Z`). The agent checks this repository for a newer release shortly after it starts and then every 6 hours. When there is one it:
 
-- **Windows:** restart the agent after installing an update.
-- **Linux:** after an update through the management page or the updater, run `sudo systemctl restart commerant-agent`.
+1. downloads the release file and verifies it against the release's `.sha256` file (a missing or mismatching checksum rejects the update);
+2. replaces its own executable, keeping the previous one as a backup;
+3. restarts itself, as a Windows service, a systemd service or a foreground run.
 
-To update manually, stop the agent (for a Windows service: stop the service, for example `Stop-Service CommerantAgent` in an administrator PowerShell), replace the executable (`commerant-agent.exe`, or `commerant-agent` extracted from the archive) with the one from the latest release, and start it again (`Start-Service CommerantAgent`, or `sudo systemctl start commerant-agent` on Linux). Your `config.toml` is kept.
+No action is needed. If the new version does not start properly, the agent returns to the previous version automatically and does not retry that release. The **Update** page shows the current version and can start an update right away.
+
+Requirements: the account the agent runs as must be allowed to write to the installation folder (on Linux, make `/opt/commerant-agent` owned by the `commerant` user: `sudo chown -R commerant:commerant /opt/commerant-agent`).
+
+To turn automatic installation off, or to change how often it checks, edit `config.toml` and restart the agent:
+
+```toml
+[update]
+enabled = true          # false = never check
+auto_install = true     # false = only log that an update is available; install from the Update page
+check_interval = "6h"
+```
+
+You can still update by hand: stop the agent (for a Windows service, for example `Stop-Service CommerantAgent` in an administrator PowerShell), replace the executable (`commerant-agent.exe`, or `commerant-agent` extracted from the archive) with the one from the latest release, and start it again (`Start-Service CommerantAgent`, or `sudo systemctl start commerant-agent` on Linux). Your `config.toml` is kept.
 
 See the [release notes](../../releases) for what changed in each version.
 
