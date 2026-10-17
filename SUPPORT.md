@@ -16,7 +16,8 @@ You can open an [issue](../../issues/new/choose) in this repository for question
 - Agent version: run `commerant-agent.exe -version` (Windows) or `./commerant-agent -version` (Linux)
 - Operating system and version (Windows or Linux distribution)
 - Whether the agent runs as a service
-- What you expected and what happened, with relevant log lines (from the **Log** page)
+- What you expected and what happened, with relevant lines from `data/logs/agent.log` (next to the agent; the **Log** page is not available when running as a service)
+- If the agent does not start: the contents of `agent-startup-error.log` (next to the executable)
 
 ## Security issues
 
